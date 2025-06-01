@@ -3,8 +3,8 @@
   <span class="neutral">C10-0000551-LIC</span>
   <span class="neutral">Copyright © 2025 YCNIUQ Inc.</span>
   <ul>
-    <li><a href="/privacy-policy">Privacy Policy</a></li>
-    <li><a href="/terms-of-use">Terms of Use</a></li>
+    <li><a href="https://tripleccollective.com/privacy-policy" target="_blank">Privacy Policy</a></li>
+    <li><a href="https://tripleccollective.com/terms-of-use" target="_blank">Terms of Use</a></li>
   </ul>
   <span class="attribution">
     Made by
