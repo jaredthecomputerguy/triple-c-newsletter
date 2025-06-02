@@ -4,13 +4,14 @@
   import type { PageProps } from "./$types";
   import { onMount } from "svelte";
   import Debug from "$lib/debug.svelte";
+  import { updateHasSubscribed, getHasSubscribed } from "$lib/state.svelte";
 
   let { form }: PageProps = $props();
 
-  let hasSubscribed = $state(false);
-
   onMount(() => {
-    hasSubscribed = localStorage.getItem("hs") === "true";
+    if (localStorage.getItem("hs") === "true") {
+      updateHasSubscribed(true);
+    }
   });
 </script>
 
@@ -25,7 +26,8 @@
   <enhanced:img class="mailbox" src="./mailbox.svg" alt="Mailbox" />
   <h1>New Product Alerts, Deals, and Exclusives</h1>
   <p>Join the Triple C Collective newsletter and be the first to know about weekly BOGOs, new product drops, and subscriber-only perks and promotions.</p>
-  {#if hasSubscribed}
+  <p>Check out our main site at <a href="https://tripleccollective.com" target="_blank">tripleccollective.com</a>!</p>
+  {#if getHasSubscribed()}
     <div class="thanks">
       <h2>Thanks for subscribing!</h2>
       <p>You will receive a welcome email shortly.</p>
@@ -37,7 +39,7 @@
         localStorage.setItem("hs", "true");
         return async ({ update }) => {
           await update();
-          hasSubscribed = true;
+          updateHasSubscribed(true);
         };
       }}>
       {#if form?.errors}
@@ -186,7 +188,7 @@
     margin-bottom: 0.5rem;
   }
 
-  .checkbox-group > label > a {
+  a {
     display: inline;
     color: $link;
     text-decoration: underline;
@@ -246,7 +248,7 @@
       padding: 2rem;
       max-width: 600px;
       font-size: 2rem;
-      margin-bottom: 12rem;
+      margin-bottom: 14rem;
     }
   }
 </style>
