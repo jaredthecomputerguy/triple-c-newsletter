@@ -1,16 +1,23 @@
 <script lang="ts">
+  import { updateHasSubscribed, getHasSubscribed } from "$lib/state.svelte";
   const isDev = import.meta.env.MODE === "development";
 
-  function clearDebugData() {
-    localStorage.clear();
-    location.reload();
+  let atBottom = $state(true);
+
+  function toggleDebugBarPosition() {
+    atBottom = !atBottom;
+  }
+
+  function toggleSubscribed() {
+    updateHasSubscribed(!getHasSubscribed());
   }
 </script>
 
 {#if isDev}
-  <div>
+  <div class:top={!atBottom}>
     <span>Dev Mode</span>
-    <button onclick={clearDebugData}>Clear Local Storage</button>
+    <button onclick={toggleSubscribed}>Toggle Subscribed</button>
+    <button onclick={toggleDebugBarPosition}>Move Debug Bar</button>
   </div>
 {/if}
 
@@ -21,15 +28,20 @@
     position: fixed;
     bottom: 0;
     right: 0;
+    z-index: 100;
     width: 100%;
     background-color: rgba(0, 0, 0, 0.5);
     display: flex;
-    flex-direction: column;
     align-items: center;
     justify-content: center;
     gap: 0.5rem;
     padding: 0.5rem;
     border-radius: 0.25rem;
+
+    &.top {
+      top: 0;
+      bottom: auto;
+    }
   }
 
   span {
