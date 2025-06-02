@@ -61,6 +61,7 @@
 
   main {
     padding: 1.5rem;
+    position: relative;
   }
 
   @media (min-width: $tablet) {
