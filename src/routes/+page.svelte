@@ -1,5 +1,17 @@
 <script lang="ts">
   import Seo from "$lib/seo.svelte";
+  import { enhance } from "$app/forms";
+  import type { PageProps } from "./$types";
+  import { onMount } from "svelte";
+  import Debug from "$lib/debug.svelte";
+
+  let { form }: PageProps = $props();
+
+  let hasSubscribed = $state(false);
+
+  onMount(() => {
+    hasSubscribed = localStorage.getItem("hs") === "true";
+  });
 </script>
 
 <Seo
@@ -8,33 +20,58 @@
   image="/opengraph-image.png"
   domain="triplecnewsletter.com"
   path="/" />
+<Debug />
 <section>
   <enhanced:img class="mailbox" src="./mailbox.svg" alt="Mailbox" />
   <h1>New Product Alerts, Deals, and Exclusives</h1>
   <p>Join the Triple C Collective newsletter and be the first to know about weekly BOGOs, new product drops, and subscriber-only perks and promotions.</p>
-  <form method="POST">
-    <div class="input-group">
-      <label for="given-name">First Name</label>
-      <input name="given-name" id="given-name" placeholder="" type="text" required autocomplete="given-name" />
+  {#if hasSubscribed}
+    <div class="thanks">
+      <h2>Thanks for subscribing!</h2>
+      <p>You will receive a welcome email shortly.</p>
     </div>
-    <div class="input-group">
-      <label for="family-name">Last Name</label>
-      <input name="family-name" id="family-name" placeholder="" type="text" required autocomplete="family-name" />
-    </div>
-    <div class="input-group">
-      <label for="email">Email<span>&ast;</span></label>
-      <input name="email" id="email" placeholder="" type="email" required autocomplete="email" />
-    </div>
+  {:else}
+    <form
+      method="POST"
+      use:enhance={() => {
+        localStorage.setItem("hs", "true");
+        return async ({ update }) => {
+          await update();
+          hasSubscribed = true;
+        };
+      }}>
+      {#if form?.errors}
+        <div class="form-errors">
+          {#each form.errors as error (error)}
+            <p>{error}</p>
+          {/each}
+        </div>
+        <p>Please try again.</p>
+      {/if}
+      <div class="input-group">
+        <label for="given-name">First Name</label>
+        <input name="given-name" id="given-name" placeholder="" type="text" autocomplete="given-name" />
+      </div>
+      <div class="input-group">
+        <label for="family-name">Last Name</label>
+        <input name="family-name" id="family-name" placeholder="" type="text" autocomplete="family-name" />
+      </div>
+      <div class="input-group">
+        <label for="email">Email<span>&ast;</span></label>
+        <input name="email" id="email" placeholder="" type="email" required autocomplete="email" />
+      </div>
 
-    <div class="checkbox-group">
-      <input id="terms" name="terms" type="checkbox" />
-      <label for="terms">
-        I agree to the <a href="/terms-of-use" target="_blank">Terms of Use</a> and <a href="/privacy-policy" target="_blank">Privacy Policy</a> and consent to receive marketing emails.<span
-          class="terms-span">*</span>
-      </label>
-    </div>
-    <button type="submit">Subscribe</button>
-  </form>
+      <div class="checkbox-group">
+        <input id="terms" name="terms" type="checkbox" required />
+        <label for="terms">
+          I agree to the <a href="https://tripleccollective.com/terms-of-use" target="_blank">Terms of Use</a> and
+          <a href="https://tripleccollective.com/privacy-policy" target="_blank">Privacy Policy</a>
+          and consent to receive marketing emails.<span class="terms-span">*</span>
+        </label>
+      </div>
+      <button type="submit">Subscribe</button>
+    </form>
+  {/if}
 </section>
 
 <style lang="scss">
@@ -170,6 +207,20 @@
     height: 100px;
   }
 
+  .thanks {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 1rem;
+    background-color: #fefefe;
+    border-radius: 0.25rem;
+    box-shadow: 0 0px 2px 0 rgba(0, 0, 0, 0.01);
+    max-width: 500px;
+    font-size: 1.25rem;
+  }
+
   @media (min-width: $tablet) {
     h1 {
       font-size: 2.5rem;
@@ -189,6 +240,13 @@
     .mailbox {
       width: 200px;
       height: 200px;
+    }
+
+    .thanks {
+      padding: 2rem;
+      max-width: 600px;
+      font-size: 2rem;
+      margin-bottom: 12rem;
     }
   }
 </style>
