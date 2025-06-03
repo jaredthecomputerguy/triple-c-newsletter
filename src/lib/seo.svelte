@@ -15,8 +15,7 @@
   <meta name="description" content={description} />
   <meta
     name="keywords"
-    content="cannabis,dispensary newsletter,weed deals,marijuana promotions,Lake County cannabis,California dispensary,Triple C Collective,exclusive offers,cannabis email list,product drops,BOGO deals,cannabis news,weed" />
-  updates,Clearlake dispensary,edibles,flower,vapes,THC deals,newsletter sign-up
+    content="cannabis,dispensary newsletter,weed deals,marijuana promotions,Lake County cannabis,California dispensary,Triple C Collective,exclusive offers,cannabis email list,product drops,BOGO deals,cannabis news,weed updates,Clearlake dispensary,edibles,flower,vapes,THC deals,newsletter sign-up" />
   <meta property="og:site_name" content="https://{domain}" />
   <meta property="og:url" content="https://www.{domain}{path}" />
   <meta property="og:type" content="website" />
