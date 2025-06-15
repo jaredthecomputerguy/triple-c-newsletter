@@ -30,7 +30,7 @@
   <meta name="twitter:description" content={description} />
   <meta name="twitter:image" content={image} />
   <link rel="manifest" href="/site.webmanifest" />
-  <link rel="icon" href="/icon.ico" type="image/x-icon" />
+  <link rel="icon" href="/favicon.ico" type="image/x-icon" />
   <link rel="apple-touch-icon" href="/apple-icon.png" />
   <link rel="canonical" href="https://www.{domain}{path}" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
