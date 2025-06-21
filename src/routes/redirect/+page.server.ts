@@ -1,6 +1,8 @@
 import { redirect } from "@sveltejs/kit";
 import type { PageServerLoad } from "./$types";
 
+const correctHostname = "tripleccollective.com";
+
 export const load: PageServerLoad = ({ url }) => {
   const to = url.searchParams.get("to");
 
@@ -8,17 +10,14 @@ export const load: PageServerLoad = ({ url }) => {
     throw redirect(302, "/");
   }
 
-  try {
-    const target = new URL(to);
-    const hostname = target.hostname;
+  const target = new URL(to);
+  const hostname = target.hostname;
 
-    if (hostname === "tripleccollective.com" || hostname.endsWith(".tripleccollective.com")) {
-      throw redirect(302, target.toString());
-    }
-  } catch {
-    // fallback or log
+  const isCorrectHostname = hostname === correctHostname || hostname.endsWith("." + correctHostname);
+
+  if (!isCorrectHostname) {
     throw redirect(302, "/");
   }
 
-  throw redirect(302, "/");
+  throw redirect(302, target.toString());
 };
