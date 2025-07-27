@@ -11,6 +11,12 @@
   function toggleSubscribed() {
     updateHasSubscribed(!getHasSubscribed());
   }
+
+  function makePageError() {
+    const error = new Error("This is a test error");
+    error.stack = "This is a test stack";
+    throw error;
+  }
 </script>
 
 {#if isDev}
@@ -18,6 +24,7 @@
     <span>Dev Mode</span>
     <button onclick={toggleSubscribed}>Toggle Subscribed</button>
     <button onclick={toggleDebugBarPosition}>Move Debug Bar</button>
+    <button onclick={makePageError}>Show Error</button>
   </div>
 {/if}
 
