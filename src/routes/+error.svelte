@@ -1,7 +1,7 @@
 <script lang="ts">
   import { page } from "$app/state";
   import Seo from "$lib/seo.svelte";
-  // eslint-disable-next-line
+  // eslint-disable-next-line no-console
   console.error("Error: ", page.error?.message);
 </script>
 
