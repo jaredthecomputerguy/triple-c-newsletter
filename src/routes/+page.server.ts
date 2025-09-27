@@ -1,11 +1,15 @@
 import { sendWelcomeEmail } from "$lib/emails/sendWelcomeEmail";
 import { fail } from "@sveltejs/kit";
-import type { Actions } from "./$types";
+import type { Actions, PageServerLoad } from "./$types";
 
-export const ssr = false;
+export const load: PageServerLoad = async ({ cookies }) => {
+  return {
+    hasSubscribed: cookies.get("hs") === "true"
+  };
+};
 
 export const actions = {
-  default: async ({ request, fetch }) => {
+  submit: async ({ request, fetch, cookies }) => {
     const formData = await request.formData();
 
     const firstName = (formData.get("given-name") as string) || "";
@@ -36,6 +40,18 @@ export const actions = {
 
     await sendWelcomeEmail({ firstName, lastName, toEmail: email, html });
 
+    cookies.set("hs", "true", {
+      path: "/",
+      maxAge: 60 * 60 * 24 // one day
+    });
+
     return { success: true, errors: null };
+  },
+  cookie: async ({ cookies }) => {
+    const hasSubscribed = cookies.get("hs") === "true";
+    if (!hasSubscribed) {
+      return;
+    }
+    cookies.delete("hs", { path: "/" });
   }
 } satisfies Actions;

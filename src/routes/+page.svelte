@@ -1,18 +1,17 @@
 <script lang="ts">
-  import Seo from "$lib/seo.svelte";
+  import type { PageProps, SubmitFunction } from "./$types";
   import { enhance } from "$app/forms";
-  import type { PageProps } from "./$types";
-  import { onMount } from "svelte";
+
+  import Seo from "$lib/seo.svelte";
   import Debug from "$lib/debug.svelte";
-  import { updateHasSubscribed, getHasSubscribed } from "$lib/state.svelte";
 
-  let { form }: PageProps = $props();
+  let { form, data }: PageProps = $props();
 
-  onMount(() => {
-    if (localStorage.getItem("hs") === "true") {
-      updateHasSubscribed(true);
-    }
-  });
+  const handleSubmit: SubmitFunction = () => {
+    return async ({ update }) => {
+      await update();
+    };
+  };
 </script>
 
 <Seo
@@ -27,21 +26,13 @@
   <h1>New Product Alerts, Deals, and Exclusives</h1>
   <p>Join the Triple C Collective newsletter and be the first to know about weekly BOGOs, new product drops, and subscriber-only perks and promotions.</p>
   <p>Check out our main site at <a href="https://tripleccollective.com" target="_blank">tripleccollective.com</a>!</p>
-  {#if getHasSubscribed()}
+  {#if data.hasSubscribed}
     <div class="thanks">
       <h2>Thanks for subscribing!</h2>
       <p>You will receive a welcome email shortly.</p>
     </div>
   {:else}
-    <form
-      method="POST"
-      use:enhance={() => {
-        localStorage.setItem("hs", "true");
-        return async ({ update }) => {
-          await update();
-          updateHasSubscribed(true);
-        };
-      }}>
+    <form method="POST" action="?/submit" use:enhance={handleSubmit}>
       {#if form?.errors}
         <div class="form-errors">
           {#each form.errors as error (error)}

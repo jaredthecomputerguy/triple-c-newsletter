@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { updateHasSubscribed, getHasSubscribed } from "$lib/state.svelte";
+  import { enhance } from "$app/forms";
   const isDev = import.meta.env.MODE === "development";
 
   let atBottom = $state(true);
@@ -9,7 +9,11 @@
   }
 
   function toggleSubscribed() {
-    updateHasSubscribed(!getHasSubscribed());
+    if (document.cookie.includes("hs=true")) {
+      document.cookie = "hs=; path=/; max-age=0";
+    } else {
+      document.cookie = "hs=true; path=/; max-age=31536000";
+    }
   }
 
   function makePageError() {
@@ -22,7 +26,9 @@
 {#if isDev}
   <div class:top={!atBottom}>
     <span>Dev Mode</span>
-    <button onclick={toggleSubscribed}>Toggle Subscribed</button>
+    <form method="POST" action="?/cookie" use:enhance>
+      <button onclick={toggleSubscribed}>Toggle Subscribed</button>
+    </form>
     <button onclick={toggleDebugBarPosition}>Move Debug Bar</button>
     <button onclick={makePageError}>Show Error</button>
   </div>
