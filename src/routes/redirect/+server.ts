@@ -7,6 +7,7 @@ const allowedHostnames = ALLOWED_ORIGINS.split(",")
 
 const log = (request: Request, url: URL, data: Record<string, unknown>) => {
   // Railway shows stdout; keep it single-line JSON
+  // eslint-disable-next-line no-console
   console.log(
     JSON.stringify({
       time: new Date().toISOString(),
