@@ -39,6 +39,7 @@
   "dependencies": {
     "@sveltejs/adapter-node": "^5.2.12",
     "dotenv": "^16.5.0",
+    "mime": "^4.1.0",
     "resend": "^4.5.1",
     "zod": "^3.25.46"
   }
