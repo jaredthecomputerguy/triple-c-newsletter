@@ -2,35 +2,23 @@
   import { enhance } from "$app/forms";
   const isDev = import.meta.env.MODE === "development";
 
-  let atBottom = $state(true);
+  let { debugPosition }: { debugPosition: "top" | "bottom" } = $props();
 
-  function toggleDebugBarPosition() {
-    atBottom = !atBottom;
-  }
-
-  function toggleSubscribed() {
-    if (document.cookie.includes("hs=true")) {
-      document.cookie = "hs=; path=/; max-age=0";
-    } else {
-      document.cookie = "hs=true; path=/; max-age=31536000";
-    }
-  }
-
-  function makePageError() {
-    const error = new Error("This is a test error");
-    error.stack = "This is a test stack";
-    throw error;
-  }
+  let atBottom = $derived(debugPosition === "bottom");
 </script>
 
 {#if isDev}
   <div class:top={!atBottom}>
     <span>Dev Mode</span>
     <form method="POST" action="?/cookie" use:enhance>
-      <button onclick={toggleSubscribed}>Toggle Subscribed</button>
+      <button type="submit">Toggle Subscribed</button>
     </form>
-    <button onclick={toggleDebugBarPosition}>Move Debug Bar</button>
-    <button onclick={makePageError}>Show Error</button>
+    <form method="POST" action="?/debugPosition" use:enhance>
+      <button type="submit">Move Debug Bar</button>
+    </form>
+    <form method="POST" action="?/error" use:enhance>
+      <button type="submit">Show Error</button>
+    </form>
   </div>
 {/if}
 

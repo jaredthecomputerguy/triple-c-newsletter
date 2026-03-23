@@ -20,7 +20,7 @@
   image="/opengraph-image.png"
   domain="triplecnewsletter.com"
   path="/" />
-<Debug />
+<Debug debugPosition={data.debugPosition} />
 <section>
   <enhanced:img class="mailbox" src="./mailbox.svg" alt="Mailbox" />
   <h1>New Product Alerts, Deals, and Exclusives</h1>

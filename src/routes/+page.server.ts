@@ -1,10 +1,11 @@
 import { sendWelcomeEmail } from "$lib/emails/sendWelcomeEmail";
-import { fail } from "@sveltejs/kit";
+import { error, fail } from "@sveltejs/kit";
 import type { Actions, PageServerLoad } from "./$types";
 
 export const load: PageServerLoad = async ({ cookies }) => {
   return {
-    hasSubscribed: cookies.get("hs") === "true"
+    hasSubscribed: cookies.get("hs") === "true",
+    debugPosition: cookies.get("debug_position") as "top" | "bottom"
   };
 };
 
@@ -48,10 +49,28 @@ export const actions = {
     return { success: true, errors: null };
   },
   cookie: async ({ cookies }) => {
-    const hasSubscribed = cookies.get("hs") === "true";
-    if (!hasSubscribed) {
-      return;
+    const name = "hs";
+    const value = "true";
+    const cookie = cookies.get(name);
+    if (cookie === value) {
+      cookies.delete(name, { path: "/" });
+    } else {
+      cookies.set(name, value, { path: "/" });
     }
-    cookies.delete("hs", { path: "/" });
+  },
+
+  debugPosition: async ({ cookies }) => {
+    const name = "debug_position";
+    const currentDebugPosition = cookies.get(name);
+
+    if (currentDebugPosition === "top") {
+      cookies.set(name, "bottom", { path: "/" });
+    } else {
+      cookies.set(name, "top", { path: "/" });
+    }
+  },
+
+  error: async () => {
+    throw error(404, { message: "Server side error" });
   }
 } satisfies Actions;
