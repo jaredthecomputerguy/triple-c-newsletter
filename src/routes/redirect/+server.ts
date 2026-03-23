@@ -1,6 +1,6 @@
 import type { RequestHandler } from "./$types";
-import { Logger } from "$lib/log";
 import { ALLOWED_ORIGINS } from "$env/static/private";
+import { Logger } from "$lib/logger";
 
 const allowedHostnames = ALLOWED_ORIGINS.split(",")
   .map((h) => h.trim().toLowerCase())
